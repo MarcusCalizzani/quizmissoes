@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Feira Missionária</title>
+    <!-- Carrega o Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Degradê de fundo com textura */
+            background-color: #f3f4f6;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239ca3af' fill-opacity='0.2'%3E%3Cpolygon fill-rule='evenodd' points='0 0 10 0 10 10 0 10' /%3E%3C/g%3E%3C/svg%3E"), 
+                linear-gradient(to bottom right, #22c55e, #fde047);
+            background-blend-mode: multiply;
+            background-attachment: fixed;
+        }
+        .correct-input {
+            border-color: #10B981 !important; /* Tailwind green-500 */
+        }
+        .incorrect-input {
+            border-color: #EF4444 !important; /* Tailwind red-500 */
+        }
+        /* Cor sólida para o botão de resposta correta */
+        .correct-button {
+            background-image: none !important;
+            background-color: #22c55e !important; /* Tailwind green-500 */
+        }
+        /* Cor sólida para o botão de resposta incorreta */
+        .incorrect-button {
+            background-image: none !important;
+            background-color: #ef4444 !important; /* Tailwind red-500 */
+        }
+        
+        @keyframes shake-horizontal {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake-horizontal {
+            animation: shake-horizontal 0.5s ease-in-out;
+        }
+        
+        @keyframes shake-vertical {
+            0%, 100% { transform: translateY(0); }
+            20%, 60% { transform: translateY(-5px); }
+            40%, 80% { transform: translateY(5px); }
+        }
+        .animate-shake-vertical {
+            animation: shake-vertical 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <!-- Imagem no topo da página -->
+    <img src="https://drive.google.com/uc?export=download&id=1sLmRRMSaBA9-25i4kYzHokODwP2JKGpg" alt="Logo do Festival de Missões" class="w-full max-w-lg mx-auto rounded-xl shadow-md mb-8">
+    
+    <div class="max-w-md mx-auto bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Quiz Missionário</h1>
+            <p class="text-gray-600">Preencha os campos. A próxima pergunta só será desbloqueada se a anterior estiver correta.</p>
+        </header>
+
+        <form id="answers-form" class="space-y-6">
+            <!-- Pergunta 1 -->
+            <div id="q1-container">
+                <label for="q1" class="block text-sm font-medium text-gray-700 mb-1">1. Quando foi fundada a Junta de Missões Nacionais?</label>
+                <textarea id="q1" name="q1" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm p-2 bg-gray-50"></textarea>
+                <button type="button" onclick="validateAnswer('q1')" id="q1-button" class="mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-green-500 to-yellow-400 hover:from-green-600 hover:to-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                    Enviar
+                </button>
+            </div>
+
+            <!-- Pergunta 2 (Inicialmente desabilitada) -->
+            <div id="q2-container" class="opacity-50 pointer-events-none">
+                <label for="q2" class="block text-sm font-medium text-gray-700 mb-1">2. Qual o tema da campanha de missões nacionais de 2025?</label>
+                <textarea id="q2" name="q2" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm p-2 bg-gray-50" disabled></textarea>
+                <button type="button" onclick="validateAnswer('q2')" id="q2-button" class="mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-green-500 to-yellow-400 hover:from-green-600 hover:to-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200" disabled>
+                    Enviar
+                </button>
+            </div>
+
+            <!-- Pergunta 3 (Inicialmente desabilitada) -->
+            <div id="q3-container" class="opacity-50 pointer-events-none">
+                <label for="q3" class="block text-sm font-medium text-gray-700 mb-1">3. Quantos missionários são hoje adotados pela Junta?</label>
+                <textarea id="q3" name="q3" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm p-2 bg-gray-50" disabled></textarea>
+                <button type="button" onclick="validateAnswer('q3')" id="q3-button" class="mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-green-500 to-yellow-400 hover:from-green-600 hover:to-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200" disabled>
+                    Enviar
+                </button>
+            </div>
+
+            <!-- Pergunta 4 (Inicialmente desabilitada) -->
+            <div id="q4-container" class="opacity-50 pointer-events-none">
+                <label for="q4" class="block text-sm font-medium text-gray-700 mb-1">4. Quais são os 3 pilares de Missões?</label>
+                <textarea id="q4" name="q4" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm p-2 bg-gray-50" disabled></textarea>
+                <button type="button" onclick="validateAnswer('q4')" id="q4-button" class="mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-green-500 to-yellow-400 hover:from-green-600 hover:to-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200" disabled>
+                    Enviar
+                </button>
+            </div>
+
+            <!-- Botões -->
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
+                <button type="submit" id="submit-button" class="w-full sm:w-1/2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                    Enviar Respostas
+                </button>
+                <button type="button" id="clear-button" class="w-full sm:w-1/2 flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                    Limpar
+                </button>
+            </div>
+        </form>
+
+        <!-- Container da mensagem de sucesso (oculto por padrão) -->
+        <div id="message-box" class="hidden mt-6 p-4 rounded-md text-center border-2 border-green-500 bg-green-100 text-green-700 shadow-sm transition-all duration-300">
+            <p>Formulário enviado com sucesso!</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('answers-form');
+            const clearButton = document.getElementById('clear-button');
+            const messageBox = document.getElementById('message-box');
+
+            // Array de IDs para perguntas e containers
+            const questions = ['q1', 'q2', 'q3', 'q4'];
+
+            // Lógica de validação das respostas
+            window.validateAnswer = (questionId) => {
+                const inputElement = document.getElementById(questionId);
+                const buttonElement = document.getElementById(`${questionId}-button`);
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const nextQuestionId = questions[questions.indexOf(questionId) + 1];
+                let isCorrect = false;
+
+                // Remove classes de validação e animação anteriores
+                inputElement.classList.remove('correct-input', 'incorrect-input');
+                buttonElement.classList.remove('correct-button', 'incorrect-button', 'animate-shake-horizontal', 'animate-shake-vertical');
+                buttonElement.classList.remove('bg-gradient-to-r', 'from-green-500', 'to-yellow-400', 'hover:from-green-600', 'hover:to-yellow-500');
+
+                // Validação das respostas
+                switch (questionId) {
+                    case 'q1':
+                        isCorrect = userAnswer.includes('1907');
+                        break;
+                    case 'q2':
+                        isCorrect = userAnswer.includes('minha pátria para cristo');
+                        break;
+                    case 'q3':
+                        isCorrect = userAnswer.includes('1800');
+                        break;
+                    case 'q4':
+                        isCorrect = (
+                            userAnswer.includes('orar') &&
+                            userAnswer.includes('ofertar') &&
+                            userAnswer.includes('ir')
+                        );
+                        break;
+                }
+
+                if (isCorrect) {
+                    inputElement.classList.add('correct-input');
+                    buttonElement.classList.add('correct-button', 'animate-shake-horizontal');
+                    setTimeout(() => {
+                        buttonElement.classList.remove('animate-shake-horizontal');
+                    }, 500);
+
+                    // Desabilita o input e o botão da pergunta atual
+                    inputElement.disabled = true;
+                    buttonElement.disabled = true;
+
+                    if (nextQuestionId) {
+                        const nextContainer = document.getElementById(`${nextQuestionId}-container`);
+                        nextContainer.classList.remove('opacity-50', 'pointer-events-none');
+                        document.getElementById(nextQuestionId).disabled = false;
+                        document.getElementById(nextQuestionId).focus();
+                        document.getElementById(`${nextQuestionId}-button`).disabled = false;
+                        // Adiciona as classes de gradiente ao próximo botão
+                        document.getElementById(`${nextQuestionId}-button`).classList.add('bg-gradient-to-r', 'from-green-500', 'to-yellow-400', 'hover:from-green-600', 'hover:to-yellow-500');
+                    }
+                } else {
+                    inputElement.classList.add('incorrect-input');
+                    buttonElement.classList.add('incorrect-button', 'animate-shake-vertical');
+                    setTimeout(() => {
+                        buttonElement.classList.remove('animate-shake-vertical');
+                        // Volta o gradiente no botão de erro após a animação
+                        buttonElement.classList.add('bg-gradient-to-r', 'from-green-500', 'to-yellow-400', 'hover:from-green-600', 'hover:to-yellow-500');
+                    }, 500);
+                }
+            };
+
+            // Adiciona o evento de submissão do formulário
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+                messageBox.classList.add('hidden');
+                console.log('Formulário submetido.');
+                messageBox.classList.remove('hidden');
+            });
+
+            // Adiciona o evento de clique para o botão "Limpar"
+            clearButton.addEventListener('click', () => {
+                form.reset();
+                messageBox.classList.add('hidden');
+
+                questions.forEach((id, index) => {
+                    const container = document.getElementById(`${id}-container`);
+                    const input = document.getElementById(id);
+                    const button = document.getElementById(`${id}-button`);
+                    
+                    if (index === 0) {
+                        container.classList.remove('opacity-50', 'pointer-events-none');
+                        input.disabled = false;
+                        button.disabled = false;
+                    } else {
+                        container.classList.add('opacity-50', 'pointer-events-none');
+                        input.disabled = true;
+                        button.disabled = true;
+                    }
+                    input.classList.remove('correct-input', 'incorrect-input');
+                    button.classList.remove('correct-button', 'incorrect-button', 'animate-shake-horizontal', 'animate-shake-vertical');
+                    button.classList.add('bg-gradient-to-r', 'from-green-500', 'to-yellow-400', 'hover:from-green-600', 'hover:to-yellow-500');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
